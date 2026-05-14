@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bostanlı Weekend Activity Planner</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: #b8a692;
+      color: #2b2520;
+      min-height: 100vh;
+      padding: 35px 18px;
+    }
+
+    .page {
+      max-width: 1050px;
+      margin: auto;
+      background: #f7f3ed;
+      border-radius: 34px;
+      padding: 26px;
+      box-shadow: 0 30px 80px rgba(45, 32, 22, 0.25);
+    }
+
+    .navbar {
+      background: #fffdf8;
+      border-radius: 999px;
+      padding: 12px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+
+    .logo {
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 22px;
+      font-size: 13px;
+      color: #6b5d50;
+    }
+
+    .hero {
+      min-height: 390px;
+      border-radius: 26px;
+      overflow: hidden;
+      background:
+        linear-gradient(to right, rgba(30,22,16,0.68), rgba(30,22,16,0.28)),
+        url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80");
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: flex-end;
+      padding: 45px;
+      color: white;
+      margin-bottom: 28px;
+    }
+
+    .hero-content {
+      max-width: 680px;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      line-height: 1.02;
+      letter-spacing: -2px;
+      margin-bottom: 14px;
+    }
+
+    .hero p {
+      max-width: 530px;
+      color: #eee2d5;
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    .start-btn {
+      border: none;
+      background: #f2e3cf;
+      color: #2b2520;
+      padding: 13px 19px;
+      border-radius: 999px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .start-btn:hover {
+      transform: translateY(-2px);
+      background: #fff4e6;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 16px;
+      margin-bottom: 55px;
+    }
+
+    .stat-card,
+    .about-card {
+      background: #e9dfd2;
+      border-radius: 22px;
+      padding: 28px;
+    }
+
+    .stat-card h2 {
+      font-size: 46px;
+      margin-bottom: 8px;
+    }
+
+    .stat-card p,
+    .about-card p {
+      color: #6f6256;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .about-card {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .about-card img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      border-radius: 80px 20px 20px 80px;
+    }
+
+    .section-title {
+      font-size: 34px;
+      letter-spacing: -1.4px;
+      margin-bottom: 22px;
+    }
+
+    .planner {
+      background: #fffdf8;
+      border-radius: 28px;
+      padding: 28px;
+      margin-bottom: 55px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 22px;
+    }
+
+    .step {
+      background: #f1ebe2;
+      border-radius: 22px;
+      padding: 18px;
+    }
+
+    .step h3 {
+      font-size: 15px;
+      margin-bottom: 13px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .option-btn {
+      border: 1px solid #ddd1c3;
+      background: #fffaf4;
+      padding: 11px 12px;
+      border-radius: 14px;
+      text-align: left;
+      cursor: pointer;
+      transition: 0.2s;
+      color: #3a3028;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .option-btn:hover,
+    .option-btn.active {
+      background: #2b2520;
+      color: white;
+      border-color: #2b2520;
+    }
+
+    .result-card {
+      display: none;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 20px;
+      background: #e9dfd2;
+      border-radius: 24px;
+      padding: 24px;
+      align-items: center;
+    }
+
+    .result-card.show {
+      display: grid;
+    }
+
+    .result-label {
+      color: #8a7663;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .result-card h2 {
+      font-size: 34px;
+      margin-bottom: 12px;
+    }
+
+    .result-card p {
+      color: #6b5d50;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .result-card img {
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+      border-radius: 20px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .mini-card {
+      min-height: 170px;
+      border-radius: 22px;
+      padding: 22px;
+      background: #e9dfd2;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .mini-card.dark {
+      background: #31261f;
+      color: white;
+    }
+
+    .mini-card h3 {
+      margin-bottom: 8px;
+    }
+
+    .mini-card p {
+      color: #73675c;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .mini-card.dark p {
+      color: #d8cabc;
+    }
+
+    @media (max-width: 850px) {
+      .steps,
+      .info-grid,
+      .about-card,
+      .result-card,
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 28px;
+      }
+
+      .hero h1 {
+        font-size: 36px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <nav class="navbar">
+      <div class="logo">Bostanlı Planner</div>
+      <div class="nav-links">
+        <span>How it works</span>
+        <span>Activities</span>
+        <span>Recommendation</span>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Mood-Based Weekend Activity Planner For Bostanlı</h1>
+        <p>
+          Choose your purpose, energy level, crowd preference, and time of day.
+          The app will match your mood with the best weekend activity in Bostanlı.
+        </p>
+        <button class="start-btn" onclick="document.getElementById('planner').scrollIntoView({behavior:'smooth'})">
+          Start Planning
+        </button>
+      </div>
+    </section>
+
+    <section class="info-grid">
+      <div class="stat-card">
+        <h2>144</h2>
+        <p>Different possible choice combinations are covered by the recommendation logic.</p>
+      </div>
+
+      <div class="about-card">
+        <div>
+          <h2>Who We Are</h2>
+          <p>
+            This simple web app helps young people choose a weekend activity around Bostanlı
+            based on their mood and preferences.
+          </p>
+        </div>
+        <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=900&q=80" alt="Cafe table">
+      </div>
+    </section>
+
+    <h2 class="section-title">Plan Your Weekend Activity</h2>
+
+    <section class="planner" id="planner">
+      <div class="steps">
+        <div class="step">
+          <h3>1. Purpose / Goal</h3>
+          <div class="options" data-group="purpose">
+            <button class="option-btn" data-value="R">Relax</button>
+            <button class="option-btn" data-value="S">Socialize</button>
+            <button class="option-btn" data-value="P">Productivity</button>
+            <button class="option-btn" data-value="A">Adventure</button>
+          </div>
+        </div>
+
+        <div class="step">
+          <h3>2. Energy Level</h3>
+          <div class="options" data-group="energy">
+            <button class="option-btn" data-value="L">Low</button>
+            <button class="option-btn" data-value="M">Medium</button>
+            <button class="option-btn" data-value="H">High</button>
+          </div>
+        </div>
+
+        <div class="step">
+          <h3>3. Crowd Preference</h3>
+          <div class="options" data-group="crowd">
+            <button class="option-btn" data-value="AL">Alone</button>
+            <button class="option-btn" data-value="SG">Small Group</button>
+            <button class="option-btn" data-value="C">Crowded</button>
+          </div>
+        </div>
+
+        <div class="step">
+          <h3>4. Time of Day</h3>
+          <div class="options" data-group="time">
+            <button class="option-btn" data-value="MO">Morning</button>
+            <button class="option-btn" data-value="AF">Afternoon</button>
+            <button class="option-btn" data-value="EV">Evening</button>
+            <button class="option-btn" data-value="NI">Night</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-card" id="resultCard">
+        <div>
+          <div class="result-label">Your Recommendation</div>
+          <h2 id="resultTitle">Select all options</h2>
+          <p id="resultText">Your personalized Bostanlı weekend activity will appear here.</p>
+        </div>
+        <img id="resultImage" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80" alt="Activity image">
+      </div>
+    </section>
+
+    <h2 class="section-title">Why Use This Planner?</h2>
+
+    <section class="cards">
+      <div class="mini-card">
+        <h3>Simple Choices</h3>
+        <p>No long forms. Just select four simple preferences.</p>
+      </div>
+      <div class="mini-card">
+        <h3>Complete Logic</h3>
+        <p>Every possible combination gives a clear recommendation.</p>
+      </div>
+      <div class="mini-card dark">
+        <h3>Local Focus</h3>
+        <p>Designed especially for weekend activities in Bostanlı.</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const selections = {
+      purpose: null,
+      energy: null,
+      crowd: null,
+      time: null
+    };
+
+    const activityDetails = {
+      SW: {
+        title: "Sunset Walk",
+        text: "Take a relaxing sunset walk at Bostanlı Sahili. This is best for calm, low-pressure moments.",
+        image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80"
+      },
+      CS: {
+        title: "Chill Seaside Café Session",
+        text: "Spend time at a calm seaside cafe such as Deniz Kenarı Cafe, Public Art, or Coffeemania.",
+        image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=80"
+      },
+      SB: {
+        title: "Social Bar Hopping",
+        text: "Go for a social bar experience around Bostanlı. You can try places like 1912 Bar or Molly Malone's.",
+        image: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=900&q=80"
+      },
+      LM: {
+        title: "Live Music Night",
+        text: "Enjoy a more energetic night with live music. Karga can be a good example for this mood.",
+        image: "https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=900&q=80"
+      },
+      QC: {
+        title: "Quiet Coffee Productivity Spot",
+        text: "Choose a quiet coffee place for studying or working, such as Caribou Coffee or Flow Coffee House.",
+        image: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=80"
+      },
+      RS: {
+        title: "Reading Session Near Sea",
+        text: "Read a book near the sea with coffee. This is ideal for calm mornings and low-energy productivity.",
+        image: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?auto=format&fit=crop&w=900&q=80"
+      },
+      BC: {
+        title: "Bicycle Coast Exploration",
+        text: "Rent a bicycle and explore the Bostanlı coastline. Best for active mornings and adventurous moods.",
+        image: "https://images.unsplash.com/photo-1507035895480-2b3156c31fc8?auto=format&fit=crop&w=900&q=80"
+      },
+      SK: {
+        title: "Skating / Running Session",
+        text: "Go for a long skating or running session along the coast. Best for high energy and active moods.",
+        image: "https://images.unsplash.com/photo-1571008887538-b36bb32f4571?auto=format&fit=crop&w=900&q=80"
+      }
+    };
+
+    function getRecommendation(purpose, energy, crowd, time) {
+      const key = `${purpose}-${energy}-${crowd}-${time}`;
+
+      const rules = {
+        "R-L-AL-MO": "RS", "R-L-AL-AF": "CS", "R-L-AL-EV": "SW", "R-L-AL-NI": "CS",
+        "R-L-SG-MO": "CS", "R-L-SG-AF": "CS", "R-L-SG-EV": "SW", "R-L-SG-NI": "CS",
+        "R-L-C-MO": "CS", "R-L-C-AF": "CS", "R-L-C-EV": "SW", "R-L-C-NI": "SB",
+        "R-M-AL-MO": "RS", "R-M-AL-AF": "QC", "R-M-AL-EV": "SW", "R-M-AL-NI": "CS",
+        "R-M-SG-MO": "CS", "R-M-SG-AF": "CS", "R-M-SG-EV": "SW", "R-M-SG-NI": "CS",
+        "R-M-C-MO": "CS", "R-M-C-AF": "CS", "R-M-C-EV": "SB", "R-M-C-NI": "LM",
+        "R-H-AL-MO": "BC", "R-H-AL-AF": "SK", "R-H-AL-EV": "SK", "R-H-AL-NI": "SW",
+        "R-H-SG-MO": "BC", "R-H-SG-AF": "BC", "R-H-SG-EV": "SW", "R-H-SG-NI": "LM",
+        "R-H-C-MO": "CS", "R-H-C-AF": "SB", "R-H-C-EV": "SB", "R-H-C-NI": "LM",
+
+        "S-L-AL-MO": "CS", "S-L-AL-AF": "CS", "S-L-AL-EV": "SW", "S-L-AL-NI": "CS",
+        "S-L-SG-MO": "CS", "S-L-SG-AF": "CS", "S-L-SG-EV": "SB", "S-L-SG-NI": "SB",
+        "S-L-C-MO": "CS", "S-L-C-AF": "SB", "S-L-C-EV": "SB", "S-L-C-NI": "LM",
+        "S-M-AL-MO": "CS", "S-M-AL-AF": "CS", "S-M-AL-EV": "SB", "S-M-AL-NI": "SB",
+        "S-M-SG-MO": "CS", "S-M-SG-AF": "CS", "S-M-SG-EV": "SB", "S-M-SG-NI": "LM",
+        "S-M-C-MO": "CS", "S-M-C-AF": "SB", "S-M-C-EV": "SB", "S-M-C-NI": "LM",
+        "S-H-AL-MO": "BC", "S-H-AL-AF": "SK", "S-H-AL-EV": "SB", "S-H-AL-NI": "LM",
+        "S-H-SG-MO": "BC", "S-H-SG-AF": "SB", "S-H-SG-EV": "SB", "S-H-SG-NI": "LM",
+        "S-H-C-MO": "SB", "S-H-C-AF": "SB", "S-H-C-EV": "SB", "S-H-C-NI": "LM",
+
+        "P-L-AL-MO": "RS", "P-L-AL-AF": "QC", "P-L-AL-EV": "RS", "P-L-AL-NI": "QC",
+        "P-L-SG-MO": "CS", "P-L-SG-AF": "QC", "P-L-SG-EV": "CS", "P-L-SG-NI": "QC",
+        "P-L-C-MO": "CS", "P-L-C-AF": "QC", "P-L-C-EV": "CS", "P-L-C-NI": "QC",
+        "P-M-AL-MO": "RS", "P-M-AL-AF": "QC", "P-M-AL-EV": "QC", "P-M-AL-NI": "QC",
+        "P-M-SG-MO": "CS", "P-M-SG-AF": "QC", "P-M-SG-EV": "QC", "P-M-SG-NI": "QC",
+        "P-M-C-MO": "CS", "P-M-C-AF": "QC", "P-M-C-EV": "QC", "P-M-C-NI": "QC",
+        "P-H-AL-MO": "QC", "P-H-AL-AF": "QC", "P-H-AL-EV": "SK", "P-H-AL-NI": "QC",
+        "P-H-SG-MO": "BC", "P-H-SG-AF": "QC", "P-H-SG-EV": "SK", "P-H-SG-NI": "QC",
+        "P-H-C-MO": "QC", "P-H-C-AF": "QC", "P-H-C-EV": "SB", "P-H-C-NI": "QC",
+
+        "A-L-AL-MO": "RS", "A-L-AL-AF": "SW", "A-L-AL-EV": "SW", "A-L-AL-NI": "CS",
+        "A-L-SG-MO": "CS", "A-L-SG-AF": "CS", "A-L-SG-EV": "SW", "A-L-SG-NI": "CS",
+        "A-L-C-MO": "CS", "A-L-C-AF": "CS", "A-L-C-EV": "SB", "A-L-C-NI": "SB",
+        "A-M-AL-MO": "BC", "A-M-AL-AF": "SK", "A-M-AL-EV": "SK", "A-M-AL-NI": "SW",
+        "A-M-SG-MO": "BC", "A-M-SG-AF": "BC", "A-M-SG-EV": "SW", "A-M-SG-NI": "SB",
+        "A-M-C-MO": "BC", "A-M-C-AF": "SB", "A-M-C-EV": "SB", "A-M-C-NI": "LM",
+        "A-H-AL-MO": "BC", "A-H-AL-AF": "SK", "A-H-AL-EV": "SK", "A-H-AL-NI": "SK",
+        "A-H-SG-MO": "BC", "A-H-SG-AF": "BC", "A-H-SG-EV": "SK", "A-H-SG-NI": "LM",
+        "A-H-C-MO": "BC", "A-H-C-AF": "SB", "A-H-C-EV": "SB", "A-H-C-NI": "LM"
+      };
+
+      return rules[key];
+    }
+
+    document.querySelectorAll(".option-btn").forEach(button => {
+      button.addEventListener("click", () => {
+        const group = button.parentElement.dataset.group;
+        selections[group] = button.dataset.value;
+
+        button.parentElement.querySelectorAll(".option-btn").forEach(btn => {
+          btn.classList.remove("active");
+        });
+
+        button.classList.add("active");
+        updateRecommendation();
+      });
+    });
+
+    function updateRecommendation() {
+      const { purpose, energy, crowd, time } = selections;
+
+      if (!purpose || !energy || !crowd || !time) {
+        return;
+      }
+
+      const activityCode = getRecommendation(purpose, energy, crowd, time);
+      const activity = activityDetails[activityCode];
+
+      document.getElementById("resultTitle").textContent = activity.title;
+      document.getElementById("resultText").textContent = activity.text;
+      document.getElementById("resultImage").src = activity.image;
+      document.getElementById("resultCard").classList.add("show");
+    }
+  </script>
+</body>
+</html>
